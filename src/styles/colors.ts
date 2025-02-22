@@ -1,8 +1,8 @@
 const colors = {
     // Primary Colors
-    primary: "#2563EB", // Academic blue - for primary actions, headers
-    primaryDark: "#1D4ED8", // Darker blue for hover states
-    primaryLight: "#DBEAFE", // Light blue for backgrounds, highlights
+    primary: "#800000", // Maroon red - for primary actions, headers
+    primaryDark: "#660000", // Darker maroon for hover states
+    primaryLight: "#FFE6E6", // Light maroon/pink for backgrounds, highlights
 
     // Secondary Colors
     secondary: "#7C3AED", // Royal purple - for accents, secondary elements
@@ -39,15 +39,22 @@ const colors = {
     inactive: "#9CA3AF", // Gray for inactive status
 
     // Accessibility
-    focus: "#2563EB", // Focus ring color
-    selection: "#BFDBFE", // Text selection color
+    focus: "#800000", // Focus ring color (changed to match primary)
+    selection: "#FFE6E6", // Text selection color (changed to match primaryLight)
 };
 
 const withOpacity = {
-    primaryAlpha10: "rgba(37, 99, 235, 0.1)",
-    primaryAlpha20: "rgba(37, 99, 235, 0.2)",
-    secondaryAlpha10: "rgba(124, 58, 237, 0.1)",
+    primaryAlpha10: "rgba(128, 0, 0, 0.1)",
+    primaryAlpha20: "rgba(128, 0, 0, 0.2)", 
+    secondaryAlpha10: "rgba(124, 58, 237, 0.1)", 
     secondaryAlpha20: "rgba(124, 58, 237, 0.2)",
+    
+    successAlpha10: "rgba(16, 185, 129, 0.1)", 
+    successAlpha20: "rgba(16, 185, 129, 0.2)", 
+    errorAlpha10: "rgba(239, 68, 68, 0.1)", 
+    errorAlpha20: "rgba(239, 68, 68, 0.2)", 
+    warningAlpha10: "rgba(245, 158, 11, 0.1)", 
+    warningAlpha20: "rgba(245, 158, 11, 0.2)"
 };
 
 export default {

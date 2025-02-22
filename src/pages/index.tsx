@@ -1,53 +1,116 @@
-import { useState } from "react";
-import { Eye, EyeOff, Lock, User, Shield } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Eye, EyeOff, Lock, User, Shield, Sun, Moon } from "lucide-react";
 import colors from "../styles/colors";
+
+// Dark mode color variants
+const darkModeColors = {
+  ...colors,
+  background: "#000000", // Pure black background
+  surfaceLight: "#18181B", // Dark surface for cards
+  surfaceMedium: "#27272A", // Slightly lighter for sections
+  surfaceDark: "#3F3F46", // Border colors
+  textPrimary: "#FFFFFF", // Pure white text
+  textSecondary: "#D4D4D8", // Light gray text
+  textTertiary: "#A1A1AA", // Darker gray text
+  primaryLight: "#450000", // Darker red for hover states
+};
 
 export default function LoginPage() {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
-  const handleLogin = async (e: { preventDefault: () => void; }) => {
+  // Get current theme colors
+  const currentColors = isDarkMode ? darkModeColors : colors;
+
+  useEffect(() => {
+    // Check system preference on mount
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setIsDarkMode(prefersDark);
+  }, []);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
       console.log("Login attempted with:", { userId, password });
-      
     } catch (error) {
       console.error("Login Failed", error);
     }
   };
 
+  const ThemeToggle = () => (
+    <button
+      type="button"
+      onClick={() => setIsDarkMode(!isDarkMode)}
+      className="absolute top-5 right-10 p-2.5 rounded-full transition-all duration-200 hover:scale-110"
+      style={{
+        backgroundColor: isDarkMode ? currentColors.surfaceMedium : currentColors.surfaceLight,
+        border: `1px solid ${currentColors.surfaceDark}`,
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+      }}
+    >
+      {isDarkMode ? (
+        <Sun className="h-6 w-6" style={{ color: colors.warning }} />
+      ) : (
+        <Moon className="h-6 w-6" style={{ color: colors.secondary }} />
+      )}
+    </button>
+  );
+
   return (
-    <div className="flex items-center justify-center min-h-screen" style={{ backgroundColor: colors.background }}>
-      <div className="w-full max-w-md">
-        <div className="rounded-lg shadow-lg overflow-hidden" style={{ backgroundColor: colors.surfaceLight }}>
-          {/* Header */}
-          <div className="px-6 py-4" style={{ backgroundColor: colors.primary }}>
-            <h1 className="text-2xl font-bold text-center" style={{ color: colors.textInverse }}>
+    <div
+      className="flex items-center justify-center min-h-screen transition-colors duration-200"
+      style={{ backgroundColor: currentColors.background }}
+    >
+      <div className="w-full max-w-xl px-4 relative"> {/* Increased max-width */}
+        <ThemeToggle />
+        <div
+          className="rounded-xl shadow-2xl overflow-hidden transition-colors duration-200"
+          style={{
+            backgroundColor: currentColors.surfaceLight,
+            boxShadow: isDarkMode
+              ? '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+              : '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+          }}
+        >
+
+          <div
+            className="px-8 py-6"
+            style={{ backgroundColor: currentColors.primary }}
+          >
+            <h1
+              className="text-3xl font-bold text-center"
+              style={{ color: currentColors.textInverse }}
+            >
               VJTI Administration Portal
             </h1>
           </div>
 
-          <div className="px-6 py-8">
-            <form onSubmit={handleLogin} className="space-y-6">
+          <div className="px-8 py-10">
+            <form onSubmit={handleLogin} className="space-y-8"> 
               <div className="space-y-2">
-                <label htmlFor="userId" className="block text-sm font-medium" style={{ color: colors.textPrimary }}>
+                <label
+                  htmlFor="userId"
+                  className="block text-sm font-medium transition-colors duration-200"
+                  style={{ color: currentColors.textPrimary }}
+                >
                   User ID
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <User className="h-5 w-5" style={{ color: colors.textTertiary }} />
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <User className="h-5 w-5" style={{ color: currentColors.textTertiary }} />
                   </div>
                   <input
                     id="userId"
                     type="text"
                     value={userId}
                     onChange={(e) => setUserId(e.target.value)}
-                    className="block w-full pl-10 pr-3 py-2 rounded-md shadow-sm"
-                    style={{ 
-                      borderColor: colors.surfaceDark,
-                      color: colors.textPrimary,
-                      backgroundColor: colors.surfaceLight
+                    className="block w-full pl-12 pr-4 py-3 rounded-lg shadow-sm text-base transition-colors duration-200"
+                    style={{
+                      borderColor: currentColors.surfaceDark,
+                      color: currentColors.textPrimary,
+                      backgroundColor: isDarkMode ? currentColors.surfaceMedium : currentColors.surfaceLight
                     }}
                     placeholder="Enter your user ID"
                     required
@@ -56,36 +119,40 @@ export default function LoginPage() {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="password" className="block text-sm font-medium" style={{ color: colors.textPrimary }}>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium transition-colors duration-200"
+                  style={{ color: currentColors.textPrimary }}
+                >
                   Password
                 </label>
                 <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5" style={{ color: colors.textTertiary }} />
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Lock className="h-5 w-5" style={{ color: currentColors.textTertiary }} />
                   </div>
                   <input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full pl-10 pr-10 py-2 rounded-md shadow-sm"
-                    style={{ 
-                      borderColor: colors.surfaceDark,
-                      color: colors.textPrimary,
-                      backgroundColor: colors.surfaceLight
+                    className="block w-full pl-12 pr-12 py-3 rounded-lg shadow-sm text-base transition-colors duration-200"
+                    style={{
+                      borderColor: currentColors.surfaceDark,
+                      color: currentColors.textPrimary,
+                      backgroundColor: isDarkMode ? currentColors.surfaceMedium : currentColors.surfaceLight
                     }}
                     placeholder="Enter your password"
                     required
                   />
                   <button
                     type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-5 w-5" style={{ color: colors.textTertiary }} />
+                      <EyeOff className="h-5 w-5" style={{ color: currentColors.textTertiary }} />
                     ) : (
-                      <Eye className="h-5 w-5" style={{ color: colors.textTertiary }} />
+                      <Eye className="h-5 w-5" style={{ color: currentColors.textTertiary }} />
                     )}
                   </button>
                 </div>
@@ -97,66 +164,85 @@ export default function LoginPage() {
                     id="remember-me"
                     name="remember-me"
                     type="checkbox"
-                    className="h-4 w-4 rounded"
-                    style={{ 
-                      borderColor: colors.surfaceDark,
-                      accentColor: colors.primary
+                    className="h-4 w-4 rounded transition-colors duration-200"
+                    style={{
+                      borderColor: currentColors.surfaceDark,
+                      accentColor: currentColors.primary
                     }}
                   />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm" style={{ color: colors.textSecondary }}>
+                  <label
+                    htmlFor="remember-me"
+                    className="ml-3 block text-sm transition-colors duration-200"
+                    style={{ color: currentColors.textSecondary }}
+                  >
                     Remember me
                   </label>
                 </div>
-                <a href="#" className="text-sm font-medium hover:underline" style={{ color: colors.primary }}>
+                <a
+                  href="#"
+                  className="text-sm font-medium hover:underline transition-colors duration-200"
+                  style={{ color: currentColors.primary }}
+                >
                   Forgot password?
                 </a>
               </div>
 
               <button
                 type="submit"
-                className="w-full flex justify-center py-2 px-4 border-transparent rounded-md shadow-sm text-sm font-medium"
-                style={{ 
-                  backgroundColor: colors.primary,
-                  color: colors.textInverse,
-                  borderWidth: 1,
+                className="w-full flex justify-center py-3 px-4 rounded-lg shadow-lg text-base font-medium transition-all duration-200 hover:scale-[1.02]"
+                style={{
+                  backgroundColor: currentColors.primary,
+                  color: currentColors.textInverse,
                 }}
-                onMouseOver={(e) => e.currentTarget.style.backgroundColor = colors.primaryDark}
-                onMouseOut={(e) => e.currentTarget.style.backgroundColor = colors.primary}
+                onMouseOver={(e) => e.currentTarget.style.backgroundColor = currentColors.primaryDark}
+                onMouseOut={(e) => e.currentTarget.style.backgroundColor = currentColors.primary}
               >
                 Login
               </button>
             </form>
 
-            <div className="mt-6 text-center">
-              <span className="text-sm" style={{ color: colors.textSecondary }}>Don't have an account? </span>
-              <a href="#" className="text-sm font-medium hover:underline" style={{ color: colors.secondary }}>
+            <div className="mt-8 text-center">
+              <span
+                className="text-base transition-colors duration-200"
+                style={{ color: currentColors.textSecondary }}
+              >
+                Don't have an account?{" "}
+              </span>
+              <a
+                href="#"
+                className="text-base font-medium hover:underline transition-colors duration-200"
+                style={{ color: currentColors.secondary }}
+              >
                 Register here
               </a>
             </div>
           </div>
 
-          <div className="px-6 py-4 border-t flex justify-end" style={{ 
-            backgroundColor: colors.surfaceMedium,
-            borderColor: colors.surfaceDark 
-          }}>
+          <div
+            className="px-8 py-4 border-t flex justify-end transition-colors duration-200"
+            style={{
+              backgroundColor: currentColors.surfaceMedium,
+              borderColor: currentColors.surfaceDark
+            }}
+          >
             <button
               type="button"
-              className="inline-flex items-center px-3 py-1 border shadow-sm text-sm leading-4 font-medium rounded-md"
-              style={{ 
-                backgroundColor: colors.surfaceLight,
-                borderColor: colors.surfaceDark,
-                color: colors.textSecondary
+              className="inline-flex items-center px-4 py-2 border shadow-sm text-sm font-medium rounded-lg transition-all duration-200 hover:scale-105"
+              style={{
+                backgroundColor: isDarkMode ? currentColors.surfaceLight : currentColors.surfaceLight,
+                borderColor: currentColors.surfaceDark,
+                color: currentColors.textSecondary
               }}
               onMouseOver={(e) => {
-                e.currentTarget.style.backgroundColor = colors.primaryLight;
-                e.currentTarget.style.color = colors.primary;
+                e.currentTarget.style.backgroundColor = currentColors.primaryLight;
+                e.currentTarget.style.color = currentColors.primary;
               }}
               onMouseOut={(e) => {
-                e.currentTarget.style.backgroundColor = colors.surfaceLight;
-                e.currentTarget.style.color = colors.textSecondary;
+                e.currentTarget.style.backgroundColor = currentColors.surfaceLight;
+                e.currentTarget.style.color = currentColors.textSecondary;
               }}
             >
-              <Shield className="h-4 w-4 mr-2" style={{ color: colors.secondary }} />
+              <Shield className="h-5 w-5 mr-2" style={{ color: currentColors.secondary }} />
               Admin Access
             </button>
           </div>
