@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Eye, EyeOff, Lock, User, Shield, Sun, Moon } from "lucide-react";
+import { Eye, EyeOff, Lock, User, Shield, Sun, Moon, Link } from "lucide-react";
 import colors from "../styles/colors";
 
 // Dark mode color variants
@@ -30,7 +30,7 @@ export default function LoginPage() {
     setIsDarkMode(prefersDark);
   }, []);
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
       console.log("Login attempted with:", { userId, password });
@@ -179,7 +179,7 @@ export default function LoginPage() {
                   </label>
                 </div>
                 <a
-                  href="#"
+                  href="/Login/ForgotPasswordPage"
                   className="text-sm font-medium hover:underline transition-colors duration-200"
                   style={{ color: currentColors.primary }}
                 >
