@@ -1,56 +1,145 @@
-.dashboard {
-    text-align: center;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    min-height: 100vh;
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: auto; /* Allow scrolling */
   }
   
-  .heading {
-    font-size: 28px;
-    margin-bottom: 20px;
-    color: #2c3e50;
+  /* Sidebar styles */
+  .sidebar {
+    width: 250px; /* Fully expanded width */
+    height: calc(100vh - 100px); /* Ensures it does not cover header/footer */
+    background-color: #333;
+    color: white;
+    position: fixed;
+    left: -210px; /* Hides most of the sidebar, leaving only a small part visible */
+    top: 50px; /* Starts below the header */
+    bottom: 50px; /* Stops above the footer */
+    padding-top: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: left 0.3s ease-in-out;
   }
   
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
-  }
-  
-  .card {
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .card:hover {
-    transform: translateY(-5px);
-  }
-  
-  .card h2 {
+  /* Sidebar toggle icon */
+  .sidebar::after {
+    content: "☰"; /* Menu icon */
+    position: absolute;
+    right: -30px; /* Positioned just outside the sidebar */
+    top: 20px;
+    background-color: #444; /* Ensure visibility */
+    color: white;
+    padding: 8px 10px;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
     font-size: 20px;
-    color: #2c3e50;
-    margin-bottom: 10px;
+    font-weight: bold;
   }
   
-  .card ul {
+  /* Sidebar expands on hover */
+  .sidebar:hover {
+    left: 0;
+  }
+  
+  /* Sidebar List */
+  .sidebarList {
     list-style: none;
     padding: 0;
   }
   
-  .card li {
-    font-size: 16px;
-    padding: 5px 0;
-    color: #555;
+  .sidebar ul {
+    padding-left: 10px;
   }
   
-  .card li::before {
-    content: "✔️";
-    margin-right: 10px;
-    color: green;
+  .submenu {
+    padding-left: 15px;
+    font-size: 14px;
+  }
+  
+  .sidebar li {
+    padding: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  
+  .sidebar li:hover {
+    background-color: #444;
+  }
+  
+  /* Header styles */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #222;
+    color: white;
+    padding: 10px 15px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+  
+  .logo {
+    height: 40px;
+    margin-right: 12px;
+  }
+  
+  .collegeName {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  /* Dashboard & Main Content */
+  .dashboard {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    margin-left: 60px; /* No shifting of content */
+    transition: margin-left 0.3s ease-in-out;
+  }
+  
+  /* Scrollable main content */
+  .main {
+    flex-grow: 1;
+    padding: 20px;
+    margin-top: 50px; /* Adjusted for the header */
+    margin-bottom: 50px; /* Prevents content from overlapping the footer */
+    overflow-y: auto; /* Enable scrolling */
+    max-height: calc(100vh - 100px); /* Adjust height dynamically */
+  }
+  
+  /* Footer */
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #222;
+    color: white;
+    padding: 12px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    font-size: 14px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 220px;
+      left: -180px;
+    }
+  
+    .sidebar::after {
+      right: -28px;
+    }
+  
+    .header, .footer {
+      font-size: 16px;
+    }
   }
   
