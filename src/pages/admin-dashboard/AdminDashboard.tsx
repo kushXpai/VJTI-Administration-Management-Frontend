@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useState } from "react";
 import styles from "../../styles/admin-dashboard.module.css";
 
@@ -100,7 +101,7 @@ const AdminDashboard = () => {
       <div className={styles.dashboard}>
         {/* Header */}
         <header className={styles.header}>
-          <img src="/images/vjti_logo.svg" alt="College Logo" className={styles.logo} />
+          <Image src="/images/vjti_logo.svg" alt="College Logo" width={50} height={50} />
           <h1 className={styles.collegeName}>Veermata Jijabai Technological Institute</h1>
         </header>
 
