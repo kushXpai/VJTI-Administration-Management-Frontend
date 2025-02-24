@@ -73,17 +73,10 @@ export default function StudentRegistrationPage() {
         
     });
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value, type } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
-        }));
-        // Clear error when user starts typing
-        if (errors[name]) {
-            setErrors(prev => ({ ...prev, [name]: '' }));
-        }
-    };
+    const handleInputChange = (event: { target: { name: string; value: string } }) => {
+        const { name, value } = event.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+      };      
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
         const file = e.target.files?.[0];
@@ -523,7 +516,7 @@ export default function StudentRegistrationPage() {
                                     onChange={(e) => handleInputChange({
                                         target: {
                                             name: "ewsStatus",
-                                            value: e.target.value === "yes"
+                                            value: e.target.value === "yes" ? "true" : "false"
                                         }
                                     })}
                                     className={`w-full p-2 rounded border ${errors.ewsStatus ? 'border-red-500' : ''}`}
@@ -545,7 +538,7 @@ export default function StudentRegistrationPage() {
                                     onChange={(e) => handleInputChange({
                                         target: {
                                             name: "orphanStatus",
-                                            value: e.target.value === "yes"
+                                            value: e.target.value === "yes" ? "true" : "false"
                                         }
                                     })}
                                     className={`w-full p-2 rounded border ${errors.orphanStatus ? 'border-red-500' : ''}`}
