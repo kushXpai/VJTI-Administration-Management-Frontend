@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Eye, EyeOff, Lock, User, Shield, Sun, Moon } from "lucide-react";
 import colors from "../styles/colors";
+import Link from "next/link";
 
 // Dark mode color variants
 const darkModeColors = {
@@ -178,13 +179,13 @@ export default function LoginPage() {
                     Remember me
                   </label>
                 </div>
-                <a
+                <Link
                   href="/Login/ForgotPasswordPage"
                   className="text-sm font-medium hover:underline transition-colors duration-200"
                   style={{ color: currentColors.primary }}
                 >
                   Forgot password?
-                </a>
+                </Link>
               </div>
 
               <button
@@ -208,13 +209,13 @@ export default function LoginPage() {
               >
                 Don&apos;t have an account?{" "}
               </span>
-              <a
+              <Link
                 href="/Registration/StudentRegistrationPage"
                 className="text-base font-medium hover:underline transition-colors duration-200"
                 style={{ color: currentColors.secondary }}
               >
                 Register here
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -225,7 +226,7 @@ export default function LoginPage() {
               borderColor: currentColors.surfaceDark
             }}
           >
-            <a
+            <Link
               href="/Admin-Dashboard/AdminDashboard"
               className="inline-flex items-center px-4 py-2 border shadow-sm text-sm font-medium rounded-lg transition-all duration-200 hover:scale-105"
               style={{
@@ -245,7 +246,7 @@ export default function LoginPage() {
             >
               <Shield className="h-5 w-5 mr-2" style={{ color: currentColors.secondary }} />
               Admin Access
-            </a>
+            </Link>
           </div>
         </div>
       </div>

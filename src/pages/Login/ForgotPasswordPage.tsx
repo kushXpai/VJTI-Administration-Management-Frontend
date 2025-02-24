@@ -135,7 +135,7 @@ export default function ForgotPasswordPage() {
                     Check your email
                   </h2>
                   <p className="text-gray-600">
-                    We've sent a 6-digit OTP to your registered email
+                    We&apos;ve sent a 6-digit OTP to your registered email
                   </p>
                 </div>
 

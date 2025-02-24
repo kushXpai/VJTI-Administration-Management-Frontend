@@ -233,7 +233,7 @@ export default function StudentRegistrationPage() {
                             {renderInput('fatherName', "Father's Name")}
                             <div>
                                 <label className="block text-sm font-medium mb-1" style={{ color: currentColors.textSecondary }}>
-                                    Father's Mobile Number <span className="text-red-500">*</span>
+                                    Father&apos;s Mobile Number <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                     type="tel"
@@ -258,7 +258,7 @@ export default function StudentRegistrationPage() {
                             {renderInput('motherName', "Mother's Name")}
                             <div>
                                 <label className="block text-sm font-medium mb-1" style={{ color: currentColors.textSecondary }}>
-                                    Mother's Mobile Number <span className="text-red-500">*</span>
+                                    Mother&apos;s Mobile Number <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                     type="tel"
@@ -283,7 +283,7 @@ export default function StudentRegistrationPage() {
                             {renderInput('guardianName', "Guardian's Name", 'text', false)}
                             <div>
                                 <label className="block text-sm font-medium mb-1" style={{ color: currentColors.textSecondary }}>
-                                    Guardian's Mobile Number
+                                    Guardian&apos;s Mobile Number
                                 </label>
                                 <input
                                     type="tel"
