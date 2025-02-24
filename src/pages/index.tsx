@@ -181,7 +181,7 @@ export default function LoginPage() {
             }}
           >
             <Link
-              href="/Admin-Dashboard/AdminDashboard"
+              href="/Admin/AdminDashboard"
               className="inline-flex items-center px-4 py-2 border shadow-sm text-sm font-medium rounded-lg transition-all duration-200 hover:scale-105"
               style={{
                 backgroundColor: colors.surfaceLight,

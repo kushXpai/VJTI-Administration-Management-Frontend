@@ -27,6 +27,7 @@ const AdminDashboard = () => {
         className={`${styles.sidebar} ${isSidebarExpanded ? styles.expanded : ""}`}
         onMouseEnter={() => setIsSidebarExpanded(true)}
         onMouseLeave={() => setIsSidebarExpanded(false)}
+        style={{height: "calc(100vh - 70px)", marginTop: "20px"}}
       >
         <nav>
           <ul className={styles.sidebarList}>
@@ -100,13 +101,23 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <div className={styles.dashboard}>
         {/* Header */}
-        <header className={styles.header}>
-          <Image src="/images/vjti_logo.svg" alt="College Logo" width={50} height={50} />
+        <header className={styles.header} style={{
+          height: "70px", 
+          position: "fixed", 
+          top: 0, 
+          left: 0, 
+          right: 0, 
+          zIndex: 100,
+          backgroundColor: "white",
+          color: "black",
+          boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+        }}>
+          <Image src="/images/vjti_logo.svg" alt="College Logo" width={40} height={0} />
           <h1 className={styles.collegeName}>Veermata Jijabai Technological Institute</h1>
         </header>
 
         {/* Dynamic Content */}
-        <main className={styles.main}>
+        <main className={styles.main} style={{marginTop: "70px"}}>
           <h1 className={styles.heading}>
             {activeSection === "dashboard" && "🏢 Admin Dashboard - Hostel Management"}
             {activeSection === "review" && "🔍 Review Applications"}
