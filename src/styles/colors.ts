@@ -57,7 +57,9 @@ const withOpacity = {
     warningAlpha20: "rgba(245, 158, 11, 0.2)"
 };
 
-export default {
+const themeColors = {
     ...colors,
     ...withOpacity
 };
+
+export default themeColors;

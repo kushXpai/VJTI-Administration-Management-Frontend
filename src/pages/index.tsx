@@ -88,7 +88,7 @@ export default function LoginPage() {
           </div>
 
           <div className="px-8 py-10">
-            <form onSubmit={handleLogin} className="space-y-8"> 
+            <form onSubmit={handleLogin} className="space-y-8">
               <div className="space-y-2">
                 <label
                   htmlFor="userId"
@@ -209,7 +209,7 @@ export default function LoginPage() {
                 Don't have an account?{" "}
               </span>
               <a
-                href="#"
+                href="/Registration/StudentRegistrationPage"
                 className="text-base font-medium hover:underline transition-colors duration-200"
                 style={{ color: currentColors.secondary }}
               >
@@ -225,13 +225,14 @@ export default function LoginPage() {
               borderColor: currentColors.surfaceDark
             }}
           >
-            <button
-              type="button"
+            <a
+              href="/Admin-Dashboard/AdminDashboard"
               className="inline-flex items-center px-4 py-2 border shadow-sm text-sm font-medium rounded-lg transition-all duration-200 hover:scale-105"
               style={{
                 backgroundColor: isDarkMode ? currentColors.surfaceLight : currentColors.surfaceLight,
                 borderColor: currentColors.surfaceDark,
-                color: currentColors.textSecondary
+                color: currentColors.textSecondary,
+                textDecoration: 'none'
               }}
               onMouseOver={(e) => {
                 e.currentTarget.style.backgroundColor = currentColors.primaryLight;
@@ -244,7 +245,7 @@ export default function LoginPage() {
             >
               <Shield className="h-5 w-5 mr-2" style={{ color: currentColors.secondary }} />
               Admin Access
-            </button>
+            </a>
           </div>
         </div>
       </div>
