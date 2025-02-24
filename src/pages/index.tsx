@@ -206,7 +206,7 @@ export default function LoginPage() {
                 className="text-base transition-colors duration-200"
                 style={{ color: currentColors.textSecondary }}
               >
-                Don't have an account?{" "}
+                Don&apos;t have an account?{" "}
               </span>
               <a
                 href="/Registration/StudentRegistrationPage"

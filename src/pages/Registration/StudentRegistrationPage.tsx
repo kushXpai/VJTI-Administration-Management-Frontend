@@ -15,7 +15,7 @@ const darkModeColors = {
 };
 
 export default function StudentRegistrationPage() {
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [isDarkMode] = useState(false);
     const currentColors = isDarkMode ? darkModeColors : colors;
     const [loading, setLoading] = useState(false);
     const [sameAsPresent, setSameAsPresent] = useState(false);

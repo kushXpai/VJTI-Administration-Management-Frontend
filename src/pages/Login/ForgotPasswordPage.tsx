@@ -10,7 +10,7 @@ export default function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleOtpChange = (index: number, value: string | any[]) => {
+  const handleOtpChange = (index: number, value: string) => {
     if (value.length > 1) return; // Prevent multi-digit input
 
     const newOtp = [...otp];
