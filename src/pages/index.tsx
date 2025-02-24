@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Eye, EyeOff, Lock, User, Shield, Sun, Moon, Link } from "lucide-react";
+import { Eye, EyeOff, Lock, User, Shield, Sun, Moon } from "lucide-react";
 import colors from "../styles/colors";
 
 // Dark mode color variants

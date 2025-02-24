@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Phone, MapPin, FileText, Upload, Loader2, Moon, Sun } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import colors from '../../styles/colors';
 
 const darkModeColors = {

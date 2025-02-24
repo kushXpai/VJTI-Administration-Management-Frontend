@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Mail, Lock, User, CheckCircle, Loader2 } from 'lucide-react';
+import { Mail, Lock, User, Loader2 } from 'lucide-react';
 
 export default function ForgotPasswordPage() {
   const [step, setStep] = useState(1); // 1: Username, 2: OTP, 3: New Password
@@ -35,7 +35,7 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
     setLoading(true);
     setError('');
-    
+
     // Simulate API call
     setTimeout(() => {
       setLoading(false);
