@@ -152,7 +152,9 @@ export default function LoginPage() {
                 onMouseOver={(e) => e.currentTarget.style.backgroundColor = colors.primaryDark}
                 onMouseOut={(e) => e.currentTarget.style.backgroundColor = colors.primary}
               >
-                Login
+                <Link href="/Student/StudentDashboard">
+                  Login
+                </Link>
               </button>
             </form>
 
