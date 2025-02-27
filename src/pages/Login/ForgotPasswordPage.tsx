@@ -81,7 +81,7 @@ export default function ForgotPasswordPage() {
           <div className="px-8 py-6 bg-[#800000]">
             <div className="flex items-center">
               <h1 className="text-3xl font-bold text-white text-center flex-1">
-                Change  Password
+                Reset Password
               </h1>
             </div>
           </div>
