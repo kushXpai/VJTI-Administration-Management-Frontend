@@ -132,7 +132,7 @@ export default function StudentDashboard() {
               </Link>
             </li>
             <li>
-              <Link href="#" className="flex items-center px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100">
+              <Link href="/Student/Hostel/StudentHostelAllocation" className="flex items-center px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-100">
                 <FaBuilding className="mr-3" /> Hostel Allocation
               </Link>
             </li>
