@@ -1,146 +1,76 @@
 import Image from 'next/image';
-import { useState } from "react";
 import styles from "../../styles/admin-dashboard.module.css";
+import { useRouter } from 'next/router';
 
 const AdminDashboard = () => {
-  const [activeSection, setActiveSection] = useState("dashboard");
-  const [expandedMenus, setExpandedMenus] = useState<{ [key: string]: boolean }>({
-    hostel: false,
-    grievance: false,
-    mess: false,
-    reports: false,
-  });
+  const router = useRouter();
 
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
-
-  const toggleMenu = (menu: string) => {
-    setExpandedMenus((prev) => ({
-      ...prev,
-      [menu]: !prev[menu],
-    }));
+  // Placeholder function for logout
+  const handleLogout = () => {
+    alert("Logging out...");
+    router.push("/login"); // Redirect to login page
   };
 
   return (
     <div className={styles.container}>
-      {/* Sidebar */}
-      <aside
-        className={`${styles.sidebar} ${isSidebarExpanded ? styles.expanded : ""}`}
-        onMouseEnter={() => setIsSidebarExpanded(true)}
-        onMouseLeave={() => setIsSidebarExpanded(false)}
-        style={{height: "calc(100vh - 70px)", marginTop: "20px"}}
-      >
-        <nav>
-          <ul className={styles.sidebarList}>
-            {/* Hostel Management */}
-            <li onClick={() => toggleMenu("hostel")}>
-              Hostel Management {expandedMenus.hostel ? "▲" : "▼"}
-            </li>
-            {expandedMenus.hostel && (
-              <ul className={styles.submenu}>
-                {["review", "merit", "vacant", "seat"].map((section, index) => (
-                  <li key={index} onClick={() => setActiveSection(section)}>
-                    {section === "review" && "🔍 Review Application"}
-                    {section === "merit" && "📜 Generate Merit List"}
-                    {section === "vacant" && "📜 Generate Vacant Rooms List"}
-                    {section === "seat" && "📋 Edit Seat Matrix"}
-                  </li>
-                ))}
-              </ul>
-            )}
+      {/* Header */}
+      <header className={styles.header}>
+        <div className={styles.headerLeft}>
+        <Image src="/images/vjti_logo.svg" alt="VJTI Logo" width={50} height={50}/>
+          <div className={styles.collegeInfo}>
+            <h1 className={styles.collegeName}>Veermata Jijabai Technological Institute</h1>
+            <p className={styles.address}>Matunga East, Mumbai, Maharashtra 400019</p>
+          </div>
+        </div>
+        <div className={styles.adminInfo}>
+          <span>Welcome, Admin</span>
+          <button className={styles.logoutButton} onClick={handleLogout}>Logout</button>
+        </div>
+      </header>
 
-            {/* Grievance Management */}
-            <li onClick={() => toggleMenu("grievance")}>
-              Grievance Management {expandedMenus.grievance ? "▲" : "▼"}
-            </li>
-            {expandedMenus.grievance && (
-              <ul className={styles.submenu}>
-                {["hostelComplaints", "messComplaints", "generalComplaints"].map((section, index) => (
-                  <li key={index} onClick={() => setActiveSection(section)}>
-                    {section === "hostelComplaints" && "🔍 View Hostel Complaints"}
-                    {section === "messComplaints" && "🔍 View Mess Complaints"}
-                    {section === "generalComplaints" && "🔍 View General Complaints"}
-                  </li>
-                ))}
-              </ul>
-            )}
+      {/* Hostel Management Section */}
+      <section className={styles.section}>
+        <h2>Hostel Management</h2>
+        <div className={styles.buttonGrid}>
+          {[
+            "Review Applications", "Generate Merit List", "Check Vacant Rooms",
+            "Edit Seat Matrix", "Start Room Allotment", "Hostel Fees Paid",
+            "Generate Hostel ID Card"
+          ].map((text, index) => (
+            <button key={index} className={styles.button}>{text}</button>
+          ))}
+        </div>
+      </section>
 
-            {/* Mess Management */}
-            <li onClick={() => toggleMenu("mess")}>
-              Mess Management {expandedMenus.mess ? "▲" : "▼"}
-            </li>
-            {expandedMenus.mess && (
-              <ul className={styles.submenu}>
-                {["updateMenu", "payments", "inventory"].map((section, index) => (
-                  <li key={index} onClick={() => setActiveSection(section)}>
-                    {section === "updateMenu" && "📅 Update Mess Menu"}
-                    {section === "payments" && "💳 Manage Payments"}
-                    {section === "inventory" && "🛒 Track Inventory"}
-                  </li>
-                ))}
-              </ul>
-            )}
+      {/* Grievances Section */}
+      <section className={styles.section}>
+        <h2>Grievances</h2>
+        <div className={styles.buttonGrid}>
+          {[
+            "Hostel Complaints", "Mess Complaints", "General Complaints",
+            "Track Complaint Status", "Room Change Requests", "Feedbacks"
+          ].map((text, index) => (
+            <button key={index} className={styles.button}>{text}</button>
+          ))}
+        </div>
+      </section>
 
-            {/* Reports */}
-            <li onClick={() => toggleMenu("reports")}>
-              Reports {expandedMenus.reports ? "▲" : "▼"}
-            </li>
-            {expandedMenus.reports && (
-              <ul className={styles.submenu}>
-                {["hostelReport", "grievanceReport"].map((section, index) => (
-                  <li key={index} onClick={() => setActiveSection(section)}>
-                    {section === "hostelReport" && "📜 Hostel Management Report"}
-                    {section === "grievanceReport" && "📜 Grievance Management Report"}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </ul>
-        </nav>
-      </aside>
+      {/* Mess Management Section */}
+      <section className={styles.section}>
+        <h2>Mess Management</h2>
+        <div className={styles.buttonGrid}>
+          {[
+            "Update Mess Menu", "Manage Payments", "Track Inventory", "Feedbacks"
+          ].map((text, index) => (
+            <button key={index} className={styles.button}>{text}</button>
+          ))}
+        </div>
+      </section>
 
-      {/* Main Content */}
-      <div className={styles.dashboard}>
-        {/* Header */}
-        <header className={styles.header} style={{
-          height: "70px", 
-          position: "fixed", 
-          top: 0, 
-          left: 0, 
-          right: 0, 
-          zIndex: 100,
-          backgroundColor: "white",
-          color: "black",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-        }}>
-          <Image src="/images/vjti_logo.svg" alt="College Logo" width={40} height={0} />
-          <h1 className={styles.collegeName}>Veermata Jijabai Technological Institute</h1>
-        </header>
-
-        {/* Dynamic Content */}
-        <main className={styles.main} style={{marginTop: "70px"}}>
-          <h1 className={styles.heading}>
-            {activeSection === "dashboard" && "🏢 Admin Dashboard - Hostel Management"}
-            {activeSection === "review" && "🔍 Review Applications"}
-            {activeSection === "merit" && "📜 Generate Merit List"}
-            {activeSection === "vacant" && "📜 Generate Vacant Rooms List"}
-            {activeSection === "seat" && "📋 Edit Seat Matrix"}
-            {activeSection === "hostelComplaints" && "🔍 View Hostel Complaints"}
-            {activeSection === "messComplaints" && "🔍 View Mess Complaints"}
-            {activeSection === "generalComplaints" && "🔍 View General Complaints"}
-            {activeSection === "updateMenu" && "📅 Update Mess Menu"}
-            {activeSection === "payments" && "💳 Manage Payments"}
-            {activeSection === "inventory" && "🛒 Track Inventory"}
-            {activeSection === "hostelReport" && "📜 Hostel Management Report"}
-            {activeSection === "grievanceReport" && "📜 Grievance Management Report"}
-          </h1>
-        </main>
-
-        {/* Footer */}
-        <footer className={styles.footer}>
-          <p>© 2025 Veermata Jijabai Technological Institute. All Rights Reserved.</p>
-          <p>Powered by FYMCA-2024-2025</p>
-        </footer>
-      </div>
+      {/* Footer */}
+      <footer className={styles.footer}>
+        <p>&copy; 2024 Veermata Jijabai Technological Institute. All rights reserved.</p>
+      </footer>
     </div>
   );
 };

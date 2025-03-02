@@ -1,145 +1,143 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow-y: auto; /* Allow scrolling */
+  padding: 20px;
+  background-color: white;
+  color: black;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background-color: #941e32;
+  color: white;
+  padding: 15px;
+  border-radius: 5px;
+  font-size: x-large;
+  flex-wrap: wrap;
+}
+
+.logo {
+  filter: invert(1);
+}
+
+.collegeInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* Space between name and address */
+}
+
+.collegeName {
+  margin-bottom: 5px; /* Space between name and address */
+}
+
+.address {
+  font-size: 14px;
+  color: #f1f1f1; /* Lighter shade for contrast */
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.adminInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: medium;
+}
+
+.logoutButton {
+  background-color: white;
+  color: #941e32;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s ease-in-out;
+}
+
+.logoutButton:hover {
+  background-color: #ddd;
+}
+
+/* Section Styling */
+.section {
+  margin-top: 20px;
+  padding-bottom: 5px;
+  position: relative;
+}
+
+/* Horizontal Line after each section */
+.section:not(:last-of-type)::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #941e32;
+  margin-top: 20px;
+}
+
+/* Section Headings */
+.section h2 {
+  color: #941e32;
+  font-size: larger;
+  font-weight: bold;
+}
+
+/* Button Grid */
+.buttonGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: center;
+  padding: 10px 0;
+  gap: 30px;
+  margin-top: 10px;
+}
+
+/* Button Styling */
+.button {
+  background-color: #941e32;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s ease-in-out;
+}
+
+.button:hover {
+  background-color: #7a1625;
+}
+
+/* Footer Styling */
+.footer {
+  background-color: #941e32;
+  color: white;
+  text-align: center;
+  padding: 15px 10px;
+  border-radius: 5px;
+  margin-top: 30px;
+  font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .buttonGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
-  
-  /* Sidebar styles */
-  .sidebar {
-    width: 250px; /* Fully expanded width */
-    height: calc(100vh - 100px); /* Ensures it does not cover header/footer */
-    background-color: #333;
-    color: white;
-    position: fixed;
-    left: -210px; /* Hides most of the sidebar, leaving only a small part visible */
-    top: 50px; /* Starts below the header */
-    bottom: 50px; /* Stops above the footer */
-    padding-top: 10px;
-    white-space: nowrap;
-    overflow: hidden;
-    transition: left 0.3s ease-in-out;
-  }
-  
-  /* Sidebar toggle icon */
-  .sidebar::after {
-    content: "☰"; /* Menu icon */
-    position: absolute;
-    right: -30px; /* Positioned just outside the sidebar */
-    top: 20px;
-    background-color: #444; /* Ensure visibility */
-    color: white;
-    padding: 8px 10px;
-    border-radius: 0 5px 5px 0;
-    cursor: pointer;
-    font-size: 20px;
-    font-weight: bold;
-  }
-  
-  /* Sidebar expands on hover */
-  .sidebar:hover {
-    left: 0;
-  }
-  
-  /* Sidebar List */
-  .sidebarList {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .sidebar ul {
-    padding-left: 10px;
-  }
-  
-  .submenu {
-    padding-left: 15px;
-    font-size: 14px;
-  }
-  
-  .sidebar li {
-    padding: 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-  }
-  
-  .sidebar li:hover {
-    background-color: #444;
-  }
-  
-  /* Header styles */
+}
+
+@media (max-width: 600px) {
   .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #222;
-    color: white;
-    padding: 10px 15px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-  }
-  
-  .logo {
-    height: 40px;
-    margin-right: 12px;
-  }
-  
-  .collegeName {
-    font-size: 20px;
-    font-weight: bold;
-  }
-  
-  /* Dashboard & Main Content */
-  .dashboard {
-    flex-grow: 1;
-    display: flex;
     flex-direction: column;
-    margin-left: 60px; /* No shifting of content */
-    transition: margin-left 0.3s ease-in-out;
+    text-align: center;
   }
-  
-  /* Scrollable main content */
-  .main {
-    flex-grow: 1;
-    padding: 20px;
-    margin-top: 50px; /* Adjusted for the header */
-    margin-bottom: 50px; /* Prevents content from overlapping the footer */
-    overflow-y: auto; /* Enable scrolling */
-    max-height: calc(100vh - 100px); /* Adjust height dynamically */
+
+  .buttonGrid {
+    grid-template-columns: repeat(1, 1fr);
   }
-  
-  /* Footer */
-  .footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #222;
-    color: white;
-    padding: 12px;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    font-size: 14px;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .sidebar {
-      width: 220px;
-      left: -180px;
-    }
-  
-    .sidebar::after {
-      right: -28px;
-    }
-  
-    .header, .footer {
-      font-size: 16px;
-    }
-  }
-  
+}
