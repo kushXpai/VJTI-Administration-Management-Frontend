@@ -1,19 +1,46 @@
 import { useState } from "react";
+import { useRouter } from "next/router"; // Import useRouter
 import { Eye, EyeOff, Lock, User, Shield } from "lucide-react";
 import colors from "../styles/colors";
 import Link from "next/link";
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4444';
 
 export default function LoginPage() {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleLogin = async (e: { preventDefault: () => void; }) => {
+  const router = useRouter(); // Initialize router
+
+  const handleLogin = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    setError(""); // Clear previous errors
+
     try {
-      console.log("Login attempted with:", { userId, password });
+      console.log("📌 Login Attempt:", { cetApplicationId: userId, password });
+
+      const response = await fetch(`http://localhost:4444/api/user/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cetApplicationId: userId, password }),
+      });
+
+      const data = await response.json();
+      console.log("✅ API Response:", data);
+
+      if (response.ok) {
+        console.log("🎉 Login successful!");
+        router.push("/Student/StudentDashboard");
+      } else {
+        setError(data.message || "Invalid credentials. Please try again.");
+      }
     } catch (error) {
-      console.error("Login Failed", error);
+      console.error("❌ Login Failed", error);
+      setError("An error occurred. Please try again.");
     }
   };
 
@@ -30,14 +57,8 @@ export default function LoginPage() {
             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
           }}
         >
-          <div
-            className="px-8 py-6"
-            style={{ backgroundColor: colors.primary }}
-          >
-            <h1
-              className="text-3xl font-bold text-center"
-              style={{ color: colors.textInverse }}
-            >
+          <div className="px-8 py-6" style={{ backgroundColor: colors.primary }}>
+            <h1 className="text-3xl font-bold text-center" style={{ color: colors.textInverse }}>
               VJTI Administration Portal
             </h1>
           </div>
@@ -45,11 +66,7 @@ export default function LoginPage() {
           <div className="px-8 py-10">
             <form onSubmit={handleLogin} className="space-y-8">
               <div className="space-y-2">
-                <label
-                  htmlFor="userId"
-                  className="block text-sm font-medium"
-                  style={{ color: colors.textPrimary }}
-                >
+                <label htmlFor="userId" className="block text-sm font-medium" style={{ color: colors.textPrimary }}>
                   User ID
                 </label>
                 <div className="relative">
@@ -74,11 +91,7 @@ export default function LoginPage() {
               </div>
 
               <div className="space-y-2">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium"
-                  style={{ color: colors.textPrimary }}
-                >
+                <label htmlFor="password" className="block text-sm font-medium" style={{ color: colors.textPrimary }}>
                   Password
                 </label>
                 <div className="relative">
@@ -113,6 +126,8 @@ export default function LoginPage() {
                 </div>
               </div>
 
+              {error && <p className="text-red-500 text-sm">{error}</p>}
+
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <input
@@ -125,19 +140,11 @@ export default function LoginPage() {
                       accentColor: colors.primary
                     }}
                   />
-                  <label
-                    htmlFor="remember-me"
-                    className="ml-3 block text-sm"
-                    style={{ color: colors.textSecondary }}
-                  >
+                  <label htmlFor="remember-me" className="ml-3 block text-sm" style={{ color: colors.textSecondary }}>
                     Remember me
                   </label>
                 </div>
-                <Link
-                  href="/Login/ForgotPasswordPage"
-                  className="text-sm font-medium hover:underline"
-                  style={{ color: colors.primary }}
-                >
+                <Link href="/Login/ForgotPasswordPage" className="text-sm font-medium hover:underline" style={{ color: colors.primary }}>
                   Forgot password?
                 </Link>
               </div>
@@ -152,36 +159,21 @@ export default function LoginPage() {
                 onMouseOver={(e) => e.currentTarget.style.backgroundColor = colors.primaryDark}
                 onMouseOut={(e) => e.currentTarget.style.backgroundColor = colors.primary}
               >
-                <Link href="/Student/StudentDashboard">
-                  Login
-                </Link>
+                Login
               </button>
             </form>
 
             <div className="mt-8 text-center">
-              <span
-                className="text-base"
-                style={{ color: colors.textSecondary }}
-              >
+              <span className="text-base" style={{ color: colors.textSecondary }}>
                 Don&apos;t have an account?{" "}
               </span>
-              <Link
-                href="/Registration/StudentRegistrationPage"
-                className="text-base font-medium hover:underline"
-                style={{ color: colors.secondary }}
-              >
+              <Link href="/Registration/StudentRegistrationPage" className="text-base font-medium hover:underline" style={{ color: colors.secondary }}>
                 Register here
               </Link>
             </div>
           </div>
 
-          <div
-            className="px-8 py-4 border-t flex justify-end"
-            style={{
-              backgroundColor: colors.surfaceMedium,
-              borderColor: colors.surfaceDark
-            }}
-          >
+          <div className="px-8 py-4 border-t flex justify-end" style={{ backgroundColor: colors.surfaceMedium, borderColor: colors.surfaceDark }}>
             <Link
               href="/Admin/AdminDashboard"
               className="inline-flex items-center px-4 py-2 border shadow-sm text-sm font-medium rounded-lg transition-all duration-200 hover:scale-105"
