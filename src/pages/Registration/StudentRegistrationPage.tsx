@@ -19,15 +19,37 @@ interface FormData {
     guardianName: string;
     guardianMobile: string;
 
+    // Address Details
+    presentAddressLine1: string;
+    presentAddressLine2: string;
+    presentState: string;
+    presentCity: string;
+    presentPinCode: string;
+    permanentAddressLine1: string;
+    permanentAddressLine2: string;
+    permanentState: string;
+    permanentCity: string;
+    permanentPinCode: string;
+
     // MH MCA CET Details
     cetApplicationId: string;
     cetRank: string;
+    course: string;
+
+    // Category Details
+    category: string;
+    isPWD: boolean;
+    pwdDetails?: string;
+    isEWS: boolean;
+    isReligiousMinority: boolean;
+    religiousMinorityDetails?: string;
 
     // Password
     createPassword: string;
     confirmPassword: string;
-    [key: string]: string;
+    [key: string]: string | boolean | undefined;
 }
+
 
 interface ErrorState {
     [key: string]: string;
@@ -56,15 +78,7 @@ export default function StudentRegistrationPage() {
         guardianName: '',
         guardianMobile: '',
 
-        // MH MCA CET Details
-        cetApplicationId: '',
-        cetRank: '',
-
-        // Password
-        createPassword: '',
-        confirmPassword: '',
-        
-        // Adding missing properties referenced in the code
+        // Address Details
         presentAddressLine1: '',
         presentAddressLine2: '',
         presentState: '',
@@ -75,7 +89,23 @@ export default function StudentRegistrationPage() {
         permanentState: '',
         permanentCity: '',
         permanentPinCode: '',
+
+        // CET Details
+        cetApplicationId: '',
+        cetRank: '',
+        course: '',
+        category: '',
+        isPWD: false,
+        pwdDetails: '',
+        isEWS: false,
+        isReligiousMinority: false,
+        religiousMinorityDetails: '',
+
+        // Password
+        createPassword: '',
+        confirmPassword: '',
     });
+
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = event.target;
@@ -116,10 +146,11 @@ export default function StudentRegistrationPage() {
         const mobileFields = ['mobileNumber', 'fatherMobile', 'motherMobile'];
 
         mobileFields.forEach(field => {
-            if (formData[field] && !mobileRegex.test(formData[field])) {
+            const value = formData[field]; // Get the value
+            if (typeof value === 'string' && !mobileRegex.test(value)) {
                 newErrors[field] = 'Please enter a valid 10-digit mobile number';
             }
-        });
+        });        
 
         if (formData.guardianMobile && !mobileRegex.test(formData.guardianMobile)) {
             newErrors.guardianMobile = 'Please enter a valid 10-digit mobile number';
@@ -128,7 +159,7 @@ export default function StudentRegistrationPage() {
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
-
+    
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -183,6 +214,47 @@ export default function StudentRegistrationPage() {
                 required={required}
             />
             {errors[name] && <p className="text-red-500 text-xs mt-1">{errors[name]}</p>}
+        </div>
+    );
+
+    const renderCheckbox = (name: string, label: string) => (
+        <div className="form-group flex items-center space-x-2">
+            <input
+                type="checkbox"
+                id={name}
+                name={name}
+                checked={formData[name as keyof FormData] as boolean}
+                onChange={(e) =>
+                    setFormData({
+                        ...formData,
+                        [name]: e.target.checked,
+                    })
+                }
+            />
+            <label htmlFor={name} className="text-sm font-semibold">
+                {label}
+            </label>
+        </div>
+    );
+
+    const renderSelect = (name: string, label: string, options: string[]) => (
+        <div className="form-group">
+            <label htmlFor={name} className="block text-sm font-medium mb-1" style={{ color: currentColors.textSecondary }}>
+                {label} <span className="text-red-500">*</span>
+            </label>
+            <select
+                id={name}
+                name={name}
+                value={String(formData[name as keyof typeof formData])} // Convert value to string
+                onChange={(e) => setFormData({ ...formData, [name]: e.target.value })}
+                className="border px-4 py-2 rounded-md w-full"
+            >
+                {options.map((option) => (
+                    <option key={option} value={option}>
+                        {option}
+                    </option>
+                ))}
+            </select>
         </div>
     );
 
@@ -294,13 +366,110 @@ export default function StudentRegistrationPage() {
                         </div>
                     </div>
 
+                    {/* Address Details Section */}
+                    <div className="space-y-4">
+                        <h2 className="text-xl font-semibold" style={{ color: currentColors.textPrimary }}>
+                            Address Details
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* Present Address Section */}
+                            <div className="space-y-4">
+                                <h3 className="text-lg font-semibold" style={{ color: currentColors.textPrimary }}>
+                                    Present Address
+                                </h3>
+                                {renderInput('presentAddressLine1', 'Present Address Line 1')}
+                                {renderInput('presentAddressLine2', 'Present Address Line 2')}
+                                {renderInput('presentState', 'Present State')}
+                                {renderInput('presentCity', 'Present City')}
+                                {renderInput('presentPinCode', 'Present Pin Code')}
+                            </div>
+
+                            {/* Permanent Address Section */}
+                            <div className="space-y-4">
+                                <h3 className="text-lg font-semibold" style={{ color: currentColors.textPrimary }}>
+                                    Permanent Address
+                                </h3>
+                                {renderInput('permanentAddressLine1', 'Permanent Address Line 1')}
+                                {renderInput('permanentAddressLine2', 'Permanent Address Line 2')}
+                                {renderInput('permanentState', 'Permanent State')}
+                                {renderInput('permanentCity', 'Permanent City')}
+                                {renderInput('permanentPinCode', 'Permanent Pin Code')}
+                            </div>
+                        </div>
+                    </div>
+
+
                     {/* MH MCA CET Details Section */}
                     <div className="space-y-4">
-                        <h2 className="text-xl font-semibold" style={{ color: currentColors.textPrimary }}>MH MCA CET Details</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {renderInput('cetApplicationId', 'MH MCA CET ID')}
+                        <h2 className="text-xl font-semibold" style={{ color: currentColors.textPrimary }}>CET Details</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {renderInput('cetApplicationId', 'CET Application ID')}
                             {renderInput('cetRank', 'State Merit Number')}
+                            <div>
+                                <label className="block text-sm font-medium mb-1" style={{ color: currentColors.textSecondary }}>
+                                    Select Course <span className="text-red-500">*</span>
+                                </label>
+                                <select
+                                    name="course"
+                                    className="w-full border border-gray-300 rounded-md"
+                                >
+                                    <option value="">Select a course</option>
+
+                                    {/* Diploma Courses */}
+                                    <optgroup label="Diploma Courses">
+                                        <option value="diplomaCivilEngineering">Diploma in Civil Engineering</option>
+                                        <option value="diplomaElectricalEngineering">Diploma in Electrical Engineering</option>
+                                        <option value="diplomaElectronicsEngineering">Diploma in Electronics Engineering</option>
+                                        <option value="diplomaMechanicalEngineering">Diploma in Mechanical Engineering</option>
+                                        <option value="diplomaTextileManufacturers">Diploma in Textile Manufacturers</option>
+                                        <option value="diplomaChemicalEngineering">Diploma in Chemical Engineering</option>
+                                    </optgroup>
+
+                                    {/* Bachelor of Technology Degree Courses */}
+                                    <optgroup label="Undergraduate Courses">
+                                        <option value="btechCivilEngineering">B.Tech Degree in Civil Engineering</option>
+                                        <option value="btechComputerEngineering">B.Tech Degree in Computer Engineering</option>
+                                        <option value="btechElectricalEngineering">B.Tech Degree in Electrical Engineering</option>
+                                        <option value="btechElectronicsEngineering">B.Tech Degree in Electronics Engineering</option>
+                                        <option value="btechElectronicsTelecommunicationEngineering">B.Tech Degree in Electronics & Telecommunication Engineering</option>
+                                        <option value="btechInformationTechnology">B.Tech Degree in Information Technology</option>
+                                        <option value="btechMechanicalEngineering">B.Tech Degree in Mechanical Engineering</option>
+                                        <option value="btechProductionEngineering">B.Tech Degree in Production Engineering</option>
+                                        <option value="btechTextileTechnology">B.Tech Degree in Textile Technology</option>
+                                    </optgroup>
+
+                                    {/* Master of Technology Degree Courses */}
+                                    <optgroup label="Postgraduate Courses">
+                                        <option value="mca">Master of Computer Application</option>
+                                        <option value="mtechCivilEngineering">M.Tech Degree in Civil Engineering</option>
+                                        <option value="mtechComputerEngineering">M.Tech Degree in Computer Engineering</option>
+                                        <option value="mtechElectricalEngineering">M.Tech Degree in Electrical Engineering</option>
+                                        <option value="mtechIOT">M.Tech Degree in Internet of Things (IOT)</option>
+                                        <option value="mtechElectronicsTelecommunicationEngineering">M.Tech Degree in Electronics & Telecommunication Engineering</option>
+                                        <option value="mtechMechanicalEngineering">M.Tech Degree in Mechanical Engineering</option>
+                                        <option value="mtechProductionEngineering">M.Tech Degree in Production Engineering</option>
+                                        <option value="mtechProjectManagement">M.Tech Degree in Project Management</option>
+                                        <option value="mtechTechnicalTextile">M.Tech Degree in Technical Textile</option>
+                                        <option value="mtechDefenceTechnology">M.Tech Degree in Defence Technology</option>
+                                    </optgroup>
+
+                                    {/* Master of Computer Application */}
+                                </select>
+                            </div>
+                            {renderSelect("category", "Category", [
+                                "General",
+                                "SC",
+                                "ST",
+                                "OBC",
+                                "EWS",
+                            ])}
+                            {renderCheckbox("isPWD", "Is PWD (Person with Disability)")}
+                            {renderInput("pwdDetails", "PWD Details (if applicable)", 'text', false)}
+                            {renderCheckbox("isEWS", "Is EWS (Economically Weaker Section)")}
+                            {renderCheckbox("isReligiousMinority", "Is Religious Minority")}
+                            {renderInput("religiousMinorityDetails", "Religious Minority Details", 'text', false)}
                         </div>
+
                     </div>
 
                     {/* Password Section */}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRouter } from "next/router"; // Import useRouter
+import { useRouter } from "next/router";
 import { Eye, EyeOff, Lock, User, Shield } from "lucide-react";
 import colors from "../styles/colors";
 import Link from "next/link";
