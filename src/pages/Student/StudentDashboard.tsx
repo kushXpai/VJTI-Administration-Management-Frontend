@@ -7,14 +7,11 @@ import { FaBuilding } from "react-icons/fa";
 import { createClient } from '@supabase/supabase-js';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4444';
-<<<<<<< HEAD
-=======
 
 // Initialize Supabase client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
->>>>>>> a489fae (UI change in frontend)
 
 interface Activity {
   id: number;
@@ -67,20 +64,12 @@ interface StudentData {
 }
 
 export default function StudentDashboard() {
-<<<<<<< HEAD
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
-  
-  // Move this useState hook before any conditional returns to follow React Hook rules
-=======
   const [studentData, setStudentData] = useState<StudentData | null>(null);
   const [loading, setLoading] = useState(true);
   const [logoutLoading, setLogoutLoading] = useState(false);
   const router = useRouter();
 
   // Current date
->>>>>>> a489fae (UI change in frontend)
   const [currentDate] = useState(
     new Date().toLocaleDateString('en-US', {
       weekday: 'long',
@@ -90,29 +79,6 @@ export default function StudentDashboard() {
     })
   );
 
-<<<<<<< HEAD
-  useEffect(() => {
-    const userId = localStorage.getItem("userId");
-  
-    if (!userId) {
-      console.error("No userId found. Redirecting to login...");
-      window.location.href = "/Login";
-      return;
-    }
-  
-    const fetchUserData = async () => {
-      try {
-        const response = await fetch(`${API_URL}/api/user/${userId}`);
-        const data = await response.json();
-  
-        if (response.ok) {
-          setUserData(data);
-        } else {
-          console.error("Failed to fetch user data:", data.message);
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-=======
   // Handle logout
   const handleLogout = async () => {
     setLogoutLoading(true);
@@ -230,17 +196,10 @@ export default function StudentDashboard() {
         }
       } catch (error) {
         console.error("Error fetching student data from API:", error);
->>>>>>> a489fae (UI change in frontend)
       } finally {
         setLoading(false);
       }
     };
-<<<<<<< HEAD
-  
-    fetchUserData();
-  }, []);
-  
-=======
 
     // Try Supabase first, then fall back to API
     const fetchData = async () => {
@@ -253,7 +212,6 @@ export default function StudentDashboard() {
     fetchData();
   }, [router]);
 
->>>>>>> a489fae (UI change in frontend)
   // Function to get the appropriate Tailwind classes for activity dots
   const getActivityDotClass = (type: Activity['type']): string => {
     switch (type) {
@@ -285,9 +243,6 @@ export default function StudentDashboard() {
     }
   };
 
-<<<<<<< HEAD
-  if (loading) return <p>Loading...</p>;
-=======
   // Function to get initials from student name
   const getInitials = (name: string): string => {
     if (!name) return "ST";
@@ -307,7 +262,6 @@ export default function StudentDashboard() {
       </div>
     </div>
   );
->>>>>>> a489fae (UI change in frontend)
 
   const activities: Activity[] = [
     {
@@ -357,8 +311,6 @@ export default function StudentDashboard() {
     }
   ];
 
-<<<<<<< HEAD
-=======
   const courseMapping: Record<string, string> = {
     // Diploma Courses
     diplomaCivilEngineering: "Diploma in Civil Engineering",
@@ -402,7 +354,6 @@ export default function StudentDashboard() {
   const academicYearStart = currentMonth >= 6 ? currentYear : currentYear - 1;
   const academicYearEnd = academicYearStart + 1;
 
->>>>>>> a489fae (UI change in frontend)
   return (
     <div className="min-h-screen bg-gray-50 flex">
       <Head>

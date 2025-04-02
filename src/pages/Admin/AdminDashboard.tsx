@@ -37,11 +37,7 @@ const AdminDashboard = () => {
       <section className={styles.section}>
         <h2>Hostel Management</h2>
         <div className={styles.buttonGrid}>
-<<<<<<< HEAD
-          <button className={styles.button} onClick={() => navigateTo('/Admin/HostelManagement/ReviewApplication')}>
-=======
           <button className={styles.button} onClick={() => navigateTo('/Admin/HostelManagement/ReviewApplications')}>
->>>>>>> a489fae (UI change in frontend)
             Review Applications
           </button>
           {[

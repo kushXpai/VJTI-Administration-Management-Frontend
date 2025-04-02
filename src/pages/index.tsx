@@ -41,11 +41,7 @@ export default function LoginPage() {
       }
 
       setResendSuccess(true);
-<<<<<<< HEAD
-      setTimeout(() => setResendSuccess(false), 5000); // Reset message after 5 seconds
-=======
       setTimeout(() => setResendSuccess(false), 5000);
->>>>>>> a489fae (UI change in frontend)
     } catch (error: any) {
       setError(error.message);
     } finally {
@@ -74,45 +70,6 @@ export default function LoginPage() {
         });
 
         console.log("Supabase auth response:", { data: authData, error: authError });
-<<<<<<< HEAD
-
-        if (authError) {
-          // Handle specific Supabase errors
-          console.log("Supabase auth error:", authError.message);
-          
-          if (authError.message.includes("Email not confirmed")) {
-            setNeedsEmailConfirmation(true);
-            throw new Error("Email not confirmed. Please check your inbox for the verification email or request a new one.");
-          } else {
-            throw new Error(authError.message || "Invalid credentials. Please try again.");
-          }
-        }
-
-        // Supabase login successful
-        console.log("🎉 Supabase login successful!");
-
-        // Store user data
-        const storage = rememberMe ? localStorage : sessionStorage;
-        storage.setItem("userId", authData.user?.id || "");
-        storage.setItem("userRole", "student");
-        console.log("User data stored in storage");
-
-        // Redirect to student dashboard
-        console.log("Attempting redirect to /Student/StudentDashboard");
-        try {
-          await router.push("/Student/StudentDashboard");
-          console.log("Redirect successful");
-        } catch (routerError) {
-          console.error("Navigation error:", routerError);
-          // Fall back to hard redirect if router.push fails
-          console.log("Falling back to direct URL redirect");
-          window.location.href = "/Student/StudentDashboard";
-        }
-      } else {
-        // Legacy API login code with similar logging...
-        // Add your CET ID login logic here if needed
-        throw new Error("CET ID login not implemented yet");
-=======
 
         if (authError) {
           // Handle specific Supabase errors
@@ -224,15 +181,10 @@ export default function LoginPage() {
           setError(error.message || "Login failed. Please try again.");
           setIsLoading(false);
         }
->>>>>>> a489fae (UI change in frontend)
       }
     } catch (error: any) {
       console.error("❌ Login Failed", error);
       setError(error.message || "Invalid credentials. Please try again.");
-<<<<<<< HEAD
-    } finally {
-=======
->>>>>>> a489fae (UI change in frontend)
       setIsLoading(false);
     }
   };
