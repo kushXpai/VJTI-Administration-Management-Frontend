@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from "next/router";
 import Head from 'next/head';
 import Link from 'next/link';
 import { FiSearch, FiHome, FiCoffee, FiAlertCircle, FiUser } from 'react-icons/fi';
 import { FaBuilding } from "react-icons/fa";
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4444';
 
 interface Activity {
   id: number;
@@ -20,6 +22,11 @@ interface Announcement {
 }
 
 export default function StudentDashboard() {
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  
+  // Move this useState hook before any conditional returns to follow React Hook rules
   const [currentDate] = useState(
     new Date().toLocaleDateString('en-US', {
       weekday: 'long',
@@ -28,6 +35,68 @@ export default function StudentDashboard() {
       day: 'numeric',
     })
   );
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+  
+    if (!userId) {
+      console.error("No userId found. Redirecting to login...");
+      window.location.href = "/Login";
+      return;
+    }
+  
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/user/${userId}`);
+        const data = await response.json();
+  
+        if (response.ok) {
+          setUserData(data);
+        } else {
+          console.error("Failed to fetch user data:", data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchUserData();
+  }, []);
+  
+  // Function to get the appropriate Tailwind classes for activity dots
+  const getActivityDotClass = (type: Activity['type']): string => {
+    switch (type) {
+      case 'success': return 'bg-green-500';
+      case 'error': return 'bg-red-500';
+      case 'warning': return 'bg-amber-500';
+      case 'secondary': return 'bg-purple-500';
+      default: return 'bg-blue-500';
+    }
+  };
+
+  // Function to get the appropriate Tailwind classes for announcement backgrounds
+  const getAnnouncementClass = (type: Announcement['type']): string => {
+    switch (type) {
+      case 'primary': return 'bg-red-50';
+      case 'secondary': return 'bg-purple-50';
+      case 'neutral': return 'bg-gray-100';
+      default: return 'bg-white';
+    }
+  };
+
+  // Function to get the appropriate Tailwind classes for announcement title colors
+  const getAnnouncementTitleClass = (type: Announcement['type']): string => {
+    switch (type) {
+      case 'primary': return 'text-red-800';
+      case 'secondary': return 'text-purple-700';
+      case 'neutral': return 'text-gray-900';
+      default: return 'text-gray-900';
+    }
+  };
+
+  if (loading) return <p>Loading...</p>;
 
   const activities: Activity[] = [
     {
@@ -76,37 +145,6 @@ export default function StudentDashboard() {
       type: "neutral"
     }
   ];
-
-  // Function to get the appropriate Tailwind classes for activity dots
-  const getActivityDotClass = (type: Activity['type']): string => {
-    switch (type) {
-      case 'success': return 'bg-green-500';
-      case 'error': return 'bg-red-500';
-      case 'warning': return 'bg-amber-500';
-      case 'secondary': return 'bg-purple-500';
-      default: return 'bg-blue-500';
-    }
-  };
-
-  // Function to get the appropriate Tailwind classes for announcement backgrounds
-  const getAnnouncementClass = (type: Announcement['type']): string => {
-    switch (type) {
-      case 'primary': return 'bg-red-50';
-      case 'secondary': return 'bg-purple-50';
-      case 'neutral': return 'bg-gray-100';
-      default: return 'bg-white';
-    }
-  };
-
-  // Function to get the appropriate Tailwind classes for announcement title colors
-  const getAnnouncementTitleClass = (type: Announcement['type']): string => {
-    switch (type) {
-      case 'primary': return 'text-red-800';
-      case 'secondary': return 'text-purple-700';
-      case 'neutral': return 'text-gray-900';
-      default: return 'text-gray-900';
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex">

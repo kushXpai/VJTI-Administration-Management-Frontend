@@ -1,46 +1,118 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { Eye, EyeOff, Lock, User, Shield } from "lucide-react";
+import { Eye, EyeOff, Lock, User, Shield, Mail, AlertCircle } from "lucide-react";
 import colors from "../styles/colors";
 import Link from "next/link";
+import { createClient } from '@supabase/supabase-js';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4444';
+// Initialize Supabase client - using environment variables
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default function LoginPage() {
-  const [userId, setUserId] = useState("");
+  const [loginIdentifier, setLoginIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [needsEmailConfirmation, setNeedsEmailConfirmation] = useState(false);
+  const [resendingEmail, setResendingEmail] = useState(false);
+  const [resendSuccess, setResendSuccess] = useState(false);
 
-  const router = useRouter(); // Initialize router
+  const router = useRouter();
+
+  const handleResendConfirmation = async () => {
+    if (!loginIdentifier.includes('@')) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
+    setResendingEmail(true);
+    try {
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: loginIdentifier,
+      });
+
+      if (error) {
+        throw new Error(error.message || "Failed to resend confirmation email");
+      }
+
+      setResendSuccess(true);
+      setTimeout(() => setResendSuccess(false), 5000); // Reset message after 5 seconds
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setResendingEmail(false);
+    }
+  };
 
   const handleLogin = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    console.log("Login form submitted");
     setError(""); // Clear previous errors
+    setNeedsEmailConfirmation(false); // Reset email confirmation state
+    setIsLoading(true);
 
     try {
-      console.log("📌 Login Attempt:", { cetApplicationId: userId, password });
+      // Check if the identifier is an email (contains @) or a CET ID
+      const isEmail = loginIdentifier.includes('@');
+      console.log("Login type:", isEmail ? "Email" : "CET ID");
 
-      const response = await fetch(`http://localhost:4444/api/user/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ cetApplicationId: userId, password }),
-      });
+      if (isEmail) {
+        // If it's an email, try Supabase authentication
+        console.log("Attempting Supabase login with:", { email: loginIdentifier });
+        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+          email: loginIdentifier,
+          password: password,
+        });
 
-      const data = await response.json();
-      console.log("✅ API Response:", data);
+        console.log("Supabase auth response:", { data: authData, error: authError });
 
-      if (response.ok) {
-        console.log("🎉 Login successful!");
-        router.push("/Student/StudentDashboard");
+        if (authError) {
+          // Handle specific Supabase errors
+          console.log("Supabase auth error:", authError.message);
+          
+          if (authError.message.includes("Email not confirmed")) {
+            setNeedsEmailConfirmation(true);
+            throw new Error("Email not confirmed. Please check your inbox for the verification email or request a new one.");
+          } else {
+            throw new Error(authError.message || "Invalid credentials. Please try again.");
+          }
+        }
+
+        // Supabase login successful
+        console.log("🎉 Supabase login successful!");
+
+        // Store user data
+        const storage = rememberMe ? localStorage : sessionStorage;
+        storage.setItem("userId", authData.user?.id || "");
+        storage.setItem("userRole", "student");
+        console.log("User data stored in storage");
+
+        // Redirect to student dashboard
+        console.log("Attempting redirect to /Student/StudentDashboard");
+        try {
+          await router.push("/Student/StudentDashboard");
+          console.log("Redirect successful");
+        } catch (routerError) {
+          console.error("Navigation error:", routerError);
+          // Fall back to hard redirect if router.push fails
+          console.log("Falling back to direct URL redirect");
+          window.location.href = "/Student/StudentDashboard";
+        }
       } else {
-        setError(data.message || "Invalid credentials. Please try again.");
+        // Legacy API login code with similar logging...
+        // Add your CET ID login logic here if needed
+        throw new Error("CET ID login not implemented yet");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("❌ Login Failed", error);
-      setError("An error occurred. Please try again.");
+      setError(error.message || "Invalid credentials. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -50,6 +122,20 @@ export default function LoginPage() {
       style={{ backgroundColor: colors.background }}
     >
       <div className="w-full max-w-xl px-4 relative">
+        {/* Check for OTP expired error in URL */}
+        {typeof window !== 'undefined' && window.location.hash.includes('otp_expired') && (
+          <div className="mb-4 p-4 rounded-lg flex items-start" style={{ backgroundColor: colors.surfaceMedium }}>
+            <AlertCircle className="h-5 w-5 mr-3 mt-0.5 flex-shrink-0" style={{ color: colors.secondary }} />
+            <div>
+              <h3 className="font-medium mb-1" style={{ color: colors.textPrimary }}>Verification link expired</h3>
+              <p className="text-sm mb-2" style={{ color: colors.textSecondary }}>
+                The email verification link you clicked has expired. Please enter your email below and click "Login",
+                then use the "Resend verification email" option to get a new link.
+              </p>
+            </div>
+          </div>
+        )}
+
         <div
           className="rounded-xl shadow-2xl overflow-hidden"
           style={{
@@ -66,26 +152,27 @@ export default function LoginPage() {
           <div className="px-8 py-10">
             <form onSubmit={handleLogin} className="space-y-8">
               <div className="space-y-2">
-                <label htmlFor="userId" className="block text-sm font-medium" style={{ color: colors.textPrimary }}>
-                  User ID
+                <label htmlFor="loginIdentifier" className="block text-sm font-medium" style={{ color: colors.textPrimary }}>
+                  Email or CET Application ID
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <User className="h-5 w-5" style={{ color: colors.textTertiary }} />
                   </div>
                   <input
-                    id="userId"
+                    id="loginIdentifier"
                     type="text"
-                    value={userId}
-                    onChange={(e) => setUserId(e.target.value)}
+                    value={loginIdentifier}
+                    onChange={(e) => setLoginIdentifier(e.target.value)}
                     className="block w-full pl-12 pr-4 py-3 rounded-lg shadow-sm text-base"
                     style={{
                       borderColor: colors.surfaceDark,
                       color: colors.textPrimary,
                       backgroundColor: colors.surfaceLight
                     }}
-                    placeholder="Enter your user ID"
+                    placeholder="Enter your email or CET Application ID"
                     required
+                    disabled={isLoading}
                   />
                 </div>
               </div>
@@ -111,11 +198,13 @@ export default function LoginPage() {
                     }}
                     placeholder="Enter your password"
                     required
+                    disabled={isLoading}
                   />
                   <button
                     type="button"
                     className="absolute inset-y-0 right-0 pr-4 flex items-center"
                     onClick={() => setShowPassword(!showPassword)}
+                    disabled={isLoading}
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5" style={{ color: colors.textTertiary }} />
@@ -126,7 +215,32 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              {error && <p className="text-red-500 text-sm">{error}</p>}
+              {error && (
+                <div className="text-red-500 text-sm p-3 rounded-lg" style={{ backgroundColor: "rgba(254, 202, 202, 0.2)" }}>
+                  {error}
+
+                  {needsEmailConfirmation && (
+                    <div className="mt-2">
+                      <button
+                        type="button"
+                        className="inline-flex items-center text-sm font-medium hover:underline"
+                        style={{ color: colors.primary }}
+                        onClick={handleResendConfirmation}
+                        disabled={resendingEmail || resendSuccess}
+                      >
+                        <Mail className="h-4 w-4 mr-1" />
+                        {resendingEmail ? 'Sending...' : resendSuccess ? 'Email sent!' : 'Resend verification email'}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {resendSuccess && !error && (
+                <div className="text-green-600 text-sm p-3 rounded-lg" style={{ backgroundColor: "rgba(187, 247, 208, 0.2)" }}>
+                  Verification email sent! Please check your inbox.
+                </div>
+              )}
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
@@ -135,10 +249,13 @@ export default function LoginPage() {
                     name="remember-me"
                     type="checkbox"
                     className="h-4 w-4 rounded"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
                     style={{
                       borderColor: colors.surfaceDark,
                       accentColor: colors.primary
                     }}
+                    disabled={isLoading}
                   />
                   <label htmlFor="remember-me" className="ml-3 block text-sm" style={{ color: colors.textSecondary }}>
                     Remember me
@@ -155,11 +272,18 @@ export default function LoginPage() {
                 style={{
                   backgroundColor: colors.primary,
                   color: colors.textInverse,
+                  opacity: isLoading ? 0.7 : 1,
+                  cursor: isLoading ? 'not-allowed' : 'pointer'
                 }}
-                onMouseOver={(e) => e.currentTarget.style.backgroundColor = colors.primaryDark}
-                onMouseOut={(e) => e.currentTarget.style.backgroundColor = colors.primary}
+                onMouseOver={(e) => {
+                  if (!isLoading) e.currentTarget.style.backgroundColor = colors.primaryDark;
+                }}
+                onMouseOut={(e) => {
+                  if (!isLoading) e.currentTarget.style.backgroundColor = colors.primary;
+                }}
+                disabled={isLoading}
               >
-                Login
+                {isLoading ? 'Logging in...' : 'Login'}
               </button>
             </form>
 

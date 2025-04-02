@@ -5,6 +5,11 @@ import { useRouter } from 'next/router';
 const AdminDashboard = () => {
   const router = useRouter();
 
+  // Function to handle navigation
+  const navigateTo = (path: string) => {
+    router.push(path);
+  };
+
   // Placeholder function for logout
   const handleLogout = () => {
     alert("Logging out...");
@@ -16,7 +21,7 @@ const AdminDashboard = () => {
       {/* Header */}
       <header className={styles.header}>
         <div className={styles.headerLeft}>
-        <Image src="/images/vjti_logo.svg" alt="VJTI Logo" width={50} height={50}/>
+          <Image src="/images/vjti_logo.svg" alt="VJTI Logo" width={50} height={50} />
           <div className={styles.collegeInfo}>
             <h1 className={styles.collegeName}>Veermata Jijabai Technological Institute</h1>
             <p className={styles.address}>Matunga East, Mumbai, Maharashtra 400019</p>
@@ -32,10 +37,13 @@ const AdminDashboard = () => {
       <section className={styles.section}>
         <h2>Hostel Management</h2>
         <div className={styles.buttonGrid}>
+          <button className={styles.button} onClick={() => navigateTo('/Admin/HostelManagement/ReviewApplication')}>
+            Review Applications
+          </button>
           {[
-            "Review Applications", "Generate Merit List", "Check Vacant Rooms",
-            "Edit Seat Matrix", "Start Room Allotment", "Hostel Fees Paid",
-            "Generate Hostel ID Card"
+            "Generate Merit List", "Check Vacant Rooms",
+            "Edit Seat Matrix", "Start Room Allotment",
+            "Hostel Fees Paid", "Generate Hostel ID Card"
           ].map((text, index) => (
             <button key={index} className={styles.button}>{text}</button>
           ))}
